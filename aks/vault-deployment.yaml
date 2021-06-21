@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    vault.poc.service: vault
+  name: vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      vault.poc.service: vault
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        vault.poc.network/vpcbr: "true"
+        vault.poc.service: vault
+    spec:
+      containers:
+      - args:
+        - vault
+        - server
+        - -dev
+        - -dev-listen-address=0.0.0.0:8200
+        env:
+        - name: VAULT_DEV_ROOT_TOKEN_ID
+          value: some-root-token
+        image: vault:1.6.1
+        imagePullPolicy: ""
+        name: vault
+        ports:
+        - containerPort: 8200
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - IPC_LOCK
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
