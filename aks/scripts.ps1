@@ -19,6 +19,9 @@ vault write rabbitmq/config/connection \
     username="guest" \
     password="guest"
 
-#Get a token
+# create my-role
 vault write rabbitmq/roles/my-role \
-    vhosts='{"/":{"write": ".*", "read": ".*"}}'
+    vhosts='{"/":{"configure": ".*", "write": ".*", "read": ".*"}}'
+
+# get a token for RabbitMQ
+vault read rabbitmq/creds/my-role
