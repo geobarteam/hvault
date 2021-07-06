@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
+    <PackageReference Include="VaultSharp" Version="1.6.0.2" />
   </ItemGroup>
 
 </Project>
