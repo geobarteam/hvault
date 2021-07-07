@@ -10,7 +10,8 @@ choco install git
 choco install consul
 
 #clone project
-mkdir Project
+mkdir C:\Project
 cd c:\Project
 git clone https://github.com/geobarteam/hvault.git
+cp C:\Project\hvault\Vms\consul\flxsrvpoc01.json C:\ProgramData\consul\config
 
