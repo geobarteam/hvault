@@ -1,0 +1,15 @@
+{
+    "server": true,
+    "node_name": "FLXSRVPOC02",
+    "datacenter": "dc1",
+    "data_dir": "$CONSUL_DATA_PATH",
+    "bind_addr": "0.0.0.0",
+    "client_addr": "0.0.0.0",
+    "advertise_addr": "10.2.0.5",
+    "bootstrap_expect": 3,
+    "retry_join": ["10.2.0.4", "10.2.0.5", "10.2.0.6"],
+    "ui": true,
+    "log_level": "DEBUG",
+    "enable_syslog": true,
+    "acl_enforce_version_8": false
+  }

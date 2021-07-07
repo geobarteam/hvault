@@ -8,3 +8,9 @@ choco install git
 
 #install consul
 choco install consul
+
+#clone project
+mkdir Project
+cd c:\Project
+git clone https://github.com/geobarteam/hvault.git
+
