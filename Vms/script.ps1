@@ -14,4 +14,7 @@ mkdir C:\Project
 cd c:\Project
 git clone https://github.com/geobarteam/hvault.git
 cp C:\Project\hvault\Vms\consul\flxsrvpoc01.json C:\ProgramData\consul\config
+restart-service consul
 
+#validate consul state
+consul members
