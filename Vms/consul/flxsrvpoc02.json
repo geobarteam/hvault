@@ -10,6 +10,6 @@
     "retry_join": ["10.2.0.4", "10.2.0.5", "10.2.0.6"],
     "ui": true,
     "log_level": "DEBUG",
-    "enable_syslog": true,
+    "enable_syslog": false,
     "acl_enforce_version_8": false
   }
