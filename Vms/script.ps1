@@ -18,3 +18,6 @@ restart-service consul
 
 #validate consul state
 consul members
+
+#start vault
+vault server -config C:\Projects\hvault\Vms\vault\flxsrvpoc01.hcl -log-level=trace
