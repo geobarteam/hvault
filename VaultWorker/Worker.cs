@@ -10,6 +10,7 @@ namespace VaultWorker
 {
     public class Worker : BackgroundService
     {
+        private string _vaultRootConfigPath = "../Vms/vault/";
         private readonly ILogger<Worker> _logger;
 
         public Worker(ILogger<Worker> logger)
@@ -19,20 +20,19 @@ namespace VaultWorker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            ExecuteConsoleCmd();
+            ExecuteCommand($"/C vault server -config {_vaultRootConfigPath + Environment.MachineName}.hcl -log-level=trace");
             Console.ReadLine();
         }
 
-        private static void ExecuteConsoleCmd()
+        private static void ExecuteCommand(string command)
         {
-            var rootPath = "C:\\Projects\\hvault\\Vms\\vault\\";
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.Process vaultProcess = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = $"/C vault server -config {rootPath}flxsrvpoc01.hcl -log-level=trace";
-            process.StartInfo = startInfo;
-            process.Start();
+            startInfo.Arguments = command;
+            vaultProcess.StartInfo = startInfo;
+            vaultProcess.Start();
         }
     }
 }
