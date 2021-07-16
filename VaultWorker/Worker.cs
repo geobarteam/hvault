@@ -20,11 +20,7 @@ namespace VaultWorker
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             ExecuteConsoleCmd();
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
-            }
+            Console.ReadLine();
         }
 
         private static void ExecuteConsoleCmd()
@@ -34,7 +30,7 @@ namespace VaultWorker
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = $"/C echo vault server -config {rootPath}flxsrvpoc01.hcl -log-level=trace";
+            startInfo.Arguments = $"/C vault server -config {rootPath}flxsrvpoc01.hcl -log-level=trace";
             process.StartInfo = startInfo;
             process.Start();
         }
