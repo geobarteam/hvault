@@ -32,8 +32,9 @@ namespace VaultWorker
         {
             _logger.LogInformation($"{_fluxysConfiguration.Application.GetConfigurationItemName()} starting up.");
       
-            $"/C vault server -config {_vaultRootConfigPath + Environment.MachineName}.hcl -log-level=trace".ExecuteAtCommandLine();
+            var process1 = $"/C vault server -config {_vaultRootConfigPath + Environment.MachineName}.hcl -log-level=trace".ExecuteAtCommandLine();
             
+
             Console.ReadLine();
         }
 
