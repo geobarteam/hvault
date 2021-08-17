@@ -3,36 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper.Configuration;
+using Fluxys.Framework.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Environment = System.Environment;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace VaultWorker
 {
     public class Worker : BackgroundService
     {
-        private string _vaultRootConfigPath = "../Vms/vault/";
+        private string _vaultRootConfigPath = "./Hcl/";
         private readonly ILogger<Worker> _logger;
+        private readonly IVaultStarterHandler _vaultStarterHandler;
+        private readonly FluxysConfiguration _fluxysConfiguration;
+        private readonly IConfiguration _configuration;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IVaultStarterHandler vaultStarterHandler, FluxysConfiguration fluxysConfiguration, IConfiguration configuration)
         {
             _logger = logger;
+            _vaultStarterHandler = vaultStarterHandler;
+            _fluxysConfiguration = fluxysConfiguration;
+            _configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            ExecuteCommand($"/C vault server -config {_vaultRootConfigPath + Environment.MachineName}.hcl -log-level=trace");
+            _logger.LogInformation($"{_fluxysConfiguration.Application.GetConfigurationItemName()} starting up.");
+      
+            $"/C vault server -config {_vaultRootConfigPath + Environment.MachineName}.hcl -log-level=trace".ExecuteAtCommandLine();
+            
             Console.ReadLine();
         }
 
-        private static void ExecuteCommand(string command)
-        {
-            System.Diagnostics.Process vaultProcess = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = command;
-            vaultProcess.StartInfo = startInfo;
-            vaultProcess.Start();
-        }
+       
     }
 }
