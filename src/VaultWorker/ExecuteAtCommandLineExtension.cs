@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace VaultWorker
 {
-    public static class Extensions
+    public static class ExecuteAtCommandLineExtension
     {
-        static string _output;
+        static StringBuilder _output;
         static System.Diagnostics.Process _process;
 
-        public static string ExecuteAtCommandLine(this string command)
+        static ILogger _logger;
+
+        public static string ExecuteAtCommandLine(this string command, ILogger logger)
         {
-            _output = "";
+            _output = new StringBuilder();
             _process = new System.Diagnostics.Process();
+            _logger = logger;
+
             _process.EnableRaisingEvents = true;
             _process.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_OutputDataReceived);
             _process.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_ErrorDataReceived);
@@ -27,27 +32,34 @@ namespace VaultWorker
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardError = true;
             _process.StartInfo = startInfo;
+            _logger.LogInformation(command);
             _process.Start();
             _process.BeginErrorReadLine();
             _process.BeginOutputReadLine();
 
             _process.WaitForExit();
-            return _output;
+            return _output.ToString();
         }
 
         private static void process_Exited(object sender, EventArgs e)
         {
-            _output += string.Format("process exited with code {0}\n", _process.ExitCode.ToString());
+            var error =  string.Format("process exited with code {0}", _process.ExitCode.ToString());
+            _logger.LogError(error);
+            _output.Append(error + "\n");
         }
 
         private static void process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            _output += e.Data + "\n";
+            var error = e.Data;
+            _logger.LogError(error);
+            _output.Append(error + "\n");
         }
 
         private static void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            _output += e.Data + "\n";
+            var info = e.Data;
+            _logger.LogInformation(info);
+            _output.Append(info + "\n");
         }
     }
 }

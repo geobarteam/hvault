@@ -31,15 +31,12 @@ namespace VaultWorker
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation($"{_fluxysConfiguration.Application.GetConfigurationItemName()} starting up.");
-            var vaultAddrCmd = "/C $env:VAULT_ADDR=\"http://127.0.0.1:8200\"".ExecuteAtCommandLine();
-            var vaultServerCmd = $"/C vault server -config {_vaultRootConfigPath + Environment.MachineName}.hcl -log-level=trace".ExecuteAtCommandLine();
-            var unseal1 = $"/C vault operator unseal {_configuration["Secrets:key1"]}".ExecuteAtCommandLine();
-            var unseal2 = $"/C vault operator unseal {_configuration["Secrets:key2"]}".ExecuteAtCommandLine();
-            var unseal3 = $"/C vault operator unseal {_configuration["Secrets:key3"]}".ExecuteAtCommandLine();
-            var status = $"/C vault status".ExecuteAtCommandLine();
-            Console.ReadLine();
+            //"/C $env:VAULT_ADDR=\"http://127.0.0.1:8200\"".ExecuteAtCommandLine(_logger);
+            $"/C vault server -config {_vaultRootConfigPath + Environment.MachineName}.hcl -log-level=trace".ExecuteAtCommandLine(_logger);
+            $"/C vault operator unseal {_configuration["Secrets:key1"]}".ExecuteAtCommandLine(_logger);
+            $"/C vault operator unseal {_configuration["Secrets:key2"]}".ExecuteAtCommandLine(_logger);
+            $"/C vault operator unseal {_configuration["Secrets:key3"]}".ExecuteAtCommandLine(_logger);
+            $"/C vault status".ExecuteAtCommandLine(_logger);
         }
-
-       
     }
 }
