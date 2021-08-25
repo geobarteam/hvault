@@ -21,3 +21,31 @@ consul members
 
 #start vault
 vault server -config C:\Projects\hvault\Vms\vault\flxsrvpoc01.hcl -log-level=trace
+
+#set vault addrr
+$env:VAULT_ADDR="http://127.0.0.1:8200"
+vault operator init
+Vault operator unseal #seal key here repeat 3x
+
+#root keys
+vault operator generate-root -init
+vault operator generate-root
+vault operator generate-root -decode=K2ZNBgZrQ1BCKDEtMFk1OFxRXlkoIQVqAwY -otp=XH5l18q9rdEzfiyp162ilgP8aj
+
+#set vault token
+$env:VAULT_TOKEN='s.xj7S2i0LtWV0LHmgl0DFURbl'
+
+#enable app role auth
+vault auth enable approle
+
+#Setup rabbitmq engine
+vault secrets enable rabbitmq
+
+#create a role for rabbitmq
+# create flbe-application that provide policy in RabbitMQ 
+vault write rabbitmq/roles/flbe-application \
+    vhosts='{"/":{"configure": ".*", "write": ".*", "read": ".*"}}'
+
+
+
+
