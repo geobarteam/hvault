@@ -31,7 +31,7 @@ namespace VaultWorker
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation($"{_fluxysConfiguration.Application.GetConfigurationItemName()} starting up.");
-            //"/C $env:VAULT_ADDR=\"http://127.0.0.1:8200\"".ExecuteAtCommandLine(_logger);
+            "/C powershell \"$env:VAULT_ADDR='http://127.0.0.1:8200'".ExecuteAtCommandLine(_logger);
             $"/C vault server -config {_vaultRootConfigPath + Environment.MachineName}.hcl -log-level=trace".ExecuteAtCommandLine(_logger);
             $"/C vault operator unseal {_configuration["Secrets:key1"]}".ExecuteAtCommandLine(_logger);
             $"/C vault operator unseal {_configuration["Secrets:key2"]}".ExecuteAtCommandLine(_logger);
