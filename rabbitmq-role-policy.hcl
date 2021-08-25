@@ -1,3 +1,3 @@
-path "rabbitmq/creds/my-role/*" {
+path "rabbitmq/creds/flbe-application/*" {
   capabilities = ["read"]
 }
